@@ -30,7 +30,11 @@ What Istio does?
 
 Components of Istio 
  - Data Plane
- - Service Plane
+    - Using Envoy Proxy ( developed in C++, and helps intercepts the traffic for the services)
+ - Control Plane
+    - Manage the Proxy ( using istiod, takes the YAML to envoy-readable configuration )
+    - Service discovery ( using pilotd )
+    - Certificate management
  
  
 
