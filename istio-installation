@@ -1,0 +1,17 @@
+Installing Istio
+- Using istioctl
+    - Generate YAML using ( istioctl manifest generate )
+    - Install to k8s ( istioctl install )
+    - istioctl can also be used for debugging
+    - Istioctl can use Profiles ( each profile has varying components )
+      - recommended profile is default ( for Prod )
+      - demo
+      - minimal ( minimal features)      
+- Using Istio Operator
+
+
+GetMesh - https://istio.tetratelabs.io/
+- Helps providing Istio that is certified against k8s distributions
+- GetMesh provides two flavours
+  - tetrate distro
+  - tetrate fips
