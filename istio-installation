@@ -212,6 +212,38 @@ root@ub-k8s-master:~# getmesh show
 1.11.3-tetrate-v0 (Active)
 root@ub-k8s-master:~#
 
+Install istioctl 
+----------------
+root@ub-k8s-master:~# curl -L https://istio.io/downloadIstio | sh -
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   101  100   101    0     0    711      0 --:--:-- --:--:-- --:--:--   711
+100  4549  100  4549    0     0   9437      0 --:--:-- --:--:-- --:--:--  9437
+
+Downloading istio-1.13.0 from https://github.com/istio/istio/releases/download/1.13.0/istio-1.13.0-linux-amd64.tar.gz ...
+
+Istio 1.13.0 Download Complete!
+
+Istio has been successfully downloaded into the istio-1.13.0 folder on your system.
+
+Next Steps:
+See https://istio.io/latest/docs/setup/install/ to add Istio to your Kubernetes cluster.
+
+To configure the istioctl client tool for your workstation,
+add the /root/istio-1.13.0/bin directory to your environment path variable with:
+         export PATH="$PATH:/root/istio-1.13.0/bin"
+
+Begin the Istio pre-installation check by running:
+         istioctl x precheck
+
+Need more information? Visit https://istio.io/latest/docs/setup/install/
+root@ub-k8s-master:~# istioctl  version
+client version: 1.13.0
+control plane version: 1.11.3
+data plane version: 1.11.3-tetrate-v0 (2 proxies)
+root@ub-k8s-master:~#
+
+
 
 Discovery Selectors 
 - Allow us to control which namespaces istio controlplane needs to watch
