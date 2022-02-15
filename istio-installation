@@ -213,4 +213,9 @@ root@ub-k8s-master:~# getmesh show
 root@ub-k8s-master:~#
 
 
+Discovery Selectors 
+- Allow us to control which namespaces istio controlplane needs to watch
+- By default, it does for all k8s resources
+- It can be configured at the mesh level
+- limits the watched and processed items by istio
 
