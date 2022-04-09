@@ -56,28 +56,15 @@ http.8080     webapp.istioinaction.io     /*                     webapp-vs-from-
               *                           /stats/prometheus*
               *                           /healthz/ready*
 
-root@ub-k8s-master:~# curl http://192.168.52.17 --resolve secured.bethel.local:80:192.168.52.17 -H "Host: secured.bethel.local" -i
-HTTP/1.1 200 OK
-date: Sat, 09 Apr 2022 07:26:14 GMT
-server: istio-envoy
-last-modified: Sat, 09 Apr 2022 06:23:33 GMT
-etag: "4d-5dc32c0249f7c"
-accept-ranges: bytes
-content-length: 77
-content-type: text/html
-x-envoy-upstream-service-time: 0
+root@ub-k8s-master:~# curl http://secured.bethel.local --resolve secured.bethel.local:80:192.168.52.17
 Server : http-app-dep2-6cd478bb5c-ptfdf on Deployment : app-http-app-dep2-v2
+root@ub-k8s-master:~# curl http://secured.bethel.local --resolve secured.bethel.local:80:192.168.52.17
+Server : http-app-dep1-697974ffdd-nrz2x on Deployment : app-http-app-dep1-v1
+root@ub-k8s-master:~# curl http://secured.bethel.local --resolve secured.bethel.local:80:192.168.52.17
+Server : http-app-dep2-6cd478bb5c-ptfdf on Deployment : app-http-app-dep2-v2
+root@ub-k8s-master:~# curl http://secured.bethel.local --resolve secured.bethel.local:80:192.168.52.17
+Server : http-app-dep1-697974ffdd-nrz2x on Deployment : app-http-app-dep1-v1
+root@ub-k8s-master:~#
 
-root@ub-k8s-master:~# curl http://192.168.52.17 --resolve secured.bethel.local:80:192.168.52.17 -H "Host: secured.bethel.local" -i
-HTTP/1.1 200 OK
-date: Sat, 09 Apr 2022 07:26:32 GMT
-server: istio-envoy
-last-modified: Sat, 09 Apr 2022 06:23:33 GMT
-etag: "4d-5dc32c0249f7c"
-accept-ranges: bytes
-content-length: 77
-content-type: text/html
-x-envoy-upstream-service-time: 0
-Server : http-app-dep2-6cd478bb5c-ptfdf on Deployment : app-http-app-dep2-v2
 
 ```
