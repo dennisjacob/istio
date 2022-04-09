@@ -79,5 +79,70 @@ root@ub-k8s-master:~# curl https://secured.bethel.local --resolve secured.bethel
 Server : http-app-dep1-697974ffdd-nrz2x on Deployment : app-http-app-dep1-v1
 root@ub-k8s-master:~#
 
+```
+
+####  Enforce a match criteria based on headers
 
 ```
+root@ub-k8s-master:~# cat case2.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: gw-case2
+  namespace: my-ns
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - "secured.bethel.local"
+    - "api.bethel.local"
+    port:
+      name: https443
+      number: 443
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: gw-secret-tls
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vs-case2
+  namespace: my-ns
+spec:
+  hosts:
+  - "secured.bethel.local"
+  - "api.bethel.local"
+  gateways:
+  - gw-case2
+  http:
+  - match:
+    - uri:
+        prefix: "/"
+    - headers:
+        Test-User:
+          exact: "dennis"
+    route:
+    - destination:
+        host: http-app-dep-svc
+        port:
+          number: 8080
+
+root@ub-k8s-master:~# curl https://secured.bethel.local --resolve secured.bethel.local:443:192.168.52.17  --cacert /root/bethel-ca.crt -i
+HTTP/2 404
+date: Sat, 09 Apr 2022 09:16:59 GMT
+server: istio-envoy
+
+root@ub-k8s-master:~# curl https://secured.bethel.local --resolve secured.bethel.local:443:192.168.52.17  --cacert /root/bethel-ca.crt  -H "Test-user: dennis"
+Server : http-app-dep1-697974ffdd-nrz2x on Deployment : app-http-app-dep1-v1
+root@ub-k8s-master:~# curl https://secured.bethel.local --resolve secured.bethel.local:443:192.168.52.17  --cacert /root/bethel-ca.crt  -H "Test-user: denns" -i
+HTTP/2 404
+date: Sat, 09 Apr 2022 09:17:14 GMT
+server: istio-envoy
+
+root@ub-k8s-master:~#
+
+
+```
+
