@@ -131,7 +131,7 @@ spec:
   host: https-app-dep-svc
   trafficPolicy:
     tls:
-      mode: SIMPLE
+      mode: SIMPLE   # Change to MUTUAL  for mTLS between GW and service. Include the cert secret using crdentialName 
 
 
 root@ub-k8s-master:~# curl  https://api.bethel.local:443 --resolve api.bethel.local:443:192.168.52.17 --cacert ./ca.pem  --key ./bethel.key --cert ./bethel.crt  -i
