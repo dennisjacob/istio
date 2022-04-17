@@ -83,7 +83,23 @@ root@ub-k8s-master:~# kubectl get po
 NAME              READY   STATUS    RESTARTS   AGE
 test-ns-testapp   1/1     Running   0          32s
 
+```
 
-
+####  test-ns  to my-ns calls
+```
+root@ub-k8s-master:~# kubectl -n test-ns exec -it test-ns-testapp -- curl https://https-app-dep-svc.my-ns.svc.cluster.local:8443 -k
+Server : https-app-dep1-5d4b459b4d-rkjf8 on Deployment : app-https-app-dep1-v1
+root@ub-k8s-master:~# kubectl -n test-ns exec -it test-ns-testapp -- curl http://http-app-dep-svc.my-ns.svc.cluster.local:8080 
+Server : http-app-dep2-6cd478bb5c-t9pzm on Deployment : app-http-app-dep2-v2
 
 ```
+
+####  is-inject-test-ns  to my-ns calls
+```
+root@ub-k8s-master:~# kubectl -n is-inject-test-ns exec -it is-inject-test-ns-testapp -c istio-proxy -- curl https://https-app-dep-svc.my-ns.svc.cluster.local:8443 -k
+Server : https-app-dep1-5d4b459b4d-rkjf8 on Deployment : app-https-app-dep1-v1
+root@ub-k8s-master:~# kubectl -n is-inject-test-ns exec -it is-inject-test-ns-testapp -c istio-proxy -- curl http://http-app-dep-svc.my-ns.svc.cluster.local:8080
+Server : http-app-dep1-697974ffdd-9k26r on Deployment : app-http-app-dep1-v1
+root@ub-k8s-master:~#
+```
+
