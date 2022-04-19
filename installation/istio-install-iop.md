@@ -53,5 +53,26 @@ istiooperator.install.istio.io/my-iop configured
 root@ub-k8s-master:~# kubectl get IstioOperator/my-iop  -n istio-system -ojsonpath='{.spec.profile}{"\n"}'
 default
 
+```
+
+#### Uninstall the istio
+```
+root@ub-k8s-master:~# kubectl get iop -n istio-system
+NAME     REVISION   STATUS    AGE
+my-iop              HEALTHY   42m
+root@ub-k8s-master:~# kubectl delete iop/my-iop -n istio-system
+istiooperator.install.istio.io "my-iop" deleted
+root@ub-k8s-master:~# istioctl operator remove
+Removing Istio operator...
+  Removed Deployment:istio-operator:istio-operator.
+  Removed Service:istio-operator:istio-operator.
+  Removed ServiceAccount:istio-operator:istio-operator.
+  Removed ClusterRole::istio-operator.
+  Removed ClusterRoleBinding::istio-operator.
+✔ Removal complete
+
+root@ub-k8s-master:~# istioctl manifest generate | kubectl delete -f -
+root@ub-k8s-master:~# kubectl delete ns istio-system --grace-period=0 --force
+namespace "istio-system" force deleted
 
 ```
