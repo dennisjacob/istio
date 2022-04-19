@@ -119,3 +119,62 @@ istiod-587f7bd8ff-rsw9h                 1/1     Running   0          43s
 root@ub-k8s-master:~#
 
 ```
+
+#### Canary upgrade with iop
+
+```
+
+root@ub-k8s-master:~# ln -nfs istio-1.13.1 istio
+
+root@ub-k8s-master:~# istioctl operator init --istioNamespace istio-system --operatorNamespace  istio-operator --revision 1-13-1
+Installing operator controller in namespace: istio-operator using image: docker.io/istio/operator:1.13.1
+Operator controller will watch namespaces: istio-system
+2022-04-19T15:57:29.840079Z     info    proto: tag has too few fields: "-"
+✔ Istio operator installed
+✔ Installation complete
+
+root@ub-k8s-master:~# kubectl get iop -n istio-system
+NAME     REVISION   STATUS    AGE
+my-iop              HEALTHY   17m
+
+root@ub-k8s-master:~# kubectl get iop/my-iop  -n istio-system -o yaml >my-iop.yaml
+
+root@ub-k8s-master:~# grep revision my-iop.yaml
+  revision: 1-13-1
+  
+root@ub-k8s-master:~# kubectl apply -f my-iop.yaml
+
+root@ub-k8s-master:~# kubectl get pod -n istio-system -l app=istiod
+NAME                             READY   STATUS    RESTARTS   AGE
+istiod-1-13-1-5bffb95b48-xjj84   1/1     Running   0          23s
+istiod-587f7bd8ff-rsw9h          1/1     Running   0          17m
+
+root@ub-k8s-master:~# kubectl get services -n istio-system -l app=istiod
+NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                 AGE
+istiod          ClusterIP   10.104.181.182   <none>        15010/TCP,15012/TCP,443/TCP,15014/TCP   20m
+istiod-1-13-1   ClusterIP   10.111.26.221    <none>        15010/TCP,15012/TCP,443/TCP,15014/TCP   52s
+
+root@ub-k8s-master:~# kubectl get po
+NAME                             READY   STATUS    RESTARTS   AGE
+http-app-dep1-697974ffdd-92289   1/1     Running   0          8s
+http-app-dep2-6cd478bb5c-g68xq   1/1     Running   0          8s
+
+root@ub-k8s-master:~# kubectl label ns my-ns  istio.io/rev=1-13-1
+namespace/my-ns labeled
+
+root@ub-k8s-master:~# kubectl get ns/my-ns  -L 'istio.io/rev'
+NAME    STATUS   AGE    REV
+my-ns   Active   100s   1-13-1
+
+root@ub-k8s-master:~# kubectl rollout restart deployment -n my-ns
+deployment.apps/http-app-dep1 restarted
+deployment.apps/http-app-dep2 restarted
+
+root@ub-k8s-master:~# kubectl get po
+NAME                             READY   STATUS        RESTARTS   AGE
+http-app-dep1-6f65fd9847-t89fx   2/2     Running       0          8s
+http-app-dep2-5cd9fb954b-d6hnm   2/2     Running       0          8s
+root@ub-k8s-master:~#
+
+
+```
