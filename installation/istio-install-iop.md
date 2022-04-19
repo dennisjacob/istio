@@ -1,18 +1,14 @@
 ### Istion installation with iop(istio operator)
 
-#### Install the Operator
+#### Install the Istio Operator
 ```
-root@ub-k8s-master:~# istioctl operator init --watchedNamespaces istio-ns --dry-run
+root@ub-k8s-master:~# istioctl operator init --istioNamespace istio-system --operatorNamespace  istio-operator
 Installing operator controller in namespace: istio-operator using image: docker.io/istio/operator:1.13.2
-Operator controller will watch namespaces: istio-ns
+Operator controller will watch namespaces: istio-system
 ✔ Istio operator installed
 ✔ Installation complete
+root@ub-k8s-master:~#
 
-root@ub-k8s-master:~# istioctl operator init --watchedNamespaces istio-ns
-Installing operator controller in namespace: istio-operator using image: docker.io/istio/operator:1.13.2
-Operator controller will watch namespaces: istio-ns
-✔ Istio operator installed
-✔ Installation complete
 
 ```
 
@@ -42,5 +38,20 @@ spec:
 
 root@ub-k8s-master:~# kubectl apply -f istio-install.yaml
 istiooperator.install.istio.io/my-iop created
+
+```
+
+#### Update the iop ( profile as example )
+```
+root@ub-k8s-master:~# kubectl get IstioOperator/my-iop  -n istio-system
+NAME     REVISION   STATUS    AGE
+my-iop              HEALTHY   3m9s
+
+root@ub-k8s-master:~# kubectl get IstioOperator/my-iop  -n istio-system -oyaml  | sed 's/profile: demo/profile: default/g' | kubectl apply -f -
+istiooperator.install.istio.io/my-iop configured
+
+root@ub-k8s-master:~# kubectl get IstioOperator/my-iop  -n istio-system -ojsonpath='{.spec.profile}{"\n"}'
+default
+
 
 ```
