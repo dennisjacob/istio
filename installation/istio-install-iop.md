@@ -75,6 +75,10 @@ root@ub-k8s-master:~# istioctl manifest generate | kubectl delete -f -
 root@ub-k8s-master:~# kubectl delete ns istio-system --grace-period=0 --force
 namespace "istio-system" force deleted
 
+#In some cases the namespace removal stays in "Terminating" state. Execute the command below
+NS=`kubectl get ns |grep Terminating | awk 'NR==1 {print $1}'` && kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
+
+
 ```
 
 #### In-place upgrade
