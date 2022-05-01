@@ -43,6 +43,7 @@ spec:
         port:
           number: 8443
           
+# if the Gateway is configured with TLS PASSTHROUGH while the DestinationRule configures TLS origination, you will end up with double encryption. This works, but is often not the desired behavior.
 
 root@ub-k8s-master:~# kubectl apply -f case4.yaml
 gateway.networking.istio.io/gw-case4 created

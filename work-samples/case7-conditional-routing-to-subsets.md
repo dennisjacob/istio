@@ -42,7 +42,6 @@ spec:
         port:
           number: 8443
         subset: version-v2
-  - route:
     - destination:
         host: https-app-dep-svc
         port:
