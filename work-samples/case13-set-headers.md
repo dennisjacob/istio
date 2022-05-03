@@ -103,6 +103,5 @@ resp-header: TLS resp
 
 Server : https-app-dep2-86b8686db7-7wh7c on Deployment : app-https-app-dep2-v2
 root@ub-k8s-master:~#
-
-
-```
+ 
+ ```
